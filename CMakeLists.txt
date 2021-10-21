@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
-project(editor)
+project(tted)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(editor tte.c)
+add_executable(tted tted.c)

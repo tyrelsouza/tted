@@ -14,7 +14,7 @@
 #include <unistd.h>
 
 /** defines */
-#define TYREL_VERSION "0.0.1"
+#define TTED_VERSION "0.0.1"
 #define CTRL_KEY(k) ((k) & 0x1f)
 
 enum editorKey {
@@ -38,6 +38,7 @@ typedef struct erow {
 
 struct editorConfig {
     int cx, cy;
+    int rowoff;
     int screenrows;
     int screencols;
     int numrows;
@@ -165,19 +166,20 @@ int getWindowSize(int *rows, int *cols) {
         return 0;
     }
 }
+
 /** Row operations */
 void editorAppendRow(char *s, size_t len) {
-    E.row = realloc(E.row, sizeof(erow) * (E.numrows+1));
+    E.row = realloc(E.row, sizeof(erow) * (E.numrows + 1));
+
     int at = E.numrows;
     E.row[at].size = len;
-    E.row[at].chars = malloc(len+1);
+    E.row[at].chars = malloc(len + 1);
     memcpy(E.row[at].chars, s, len);
     E.row[at].chars[len] = '\0';
     E.numrows++;
 }
 
 /** file i/o */
-
 void editorOpen(char *filename) {
     FILE *fp = fopen(filename, "r");
     if (!fp) die("fopen");
@@ -185,8 +187,7 @@ void editorOpen(char *filename) {
     char *line = NULL;
     size_t linecap = 0;
     ssize_t linelen;
-    linelen = getline(&line, &linecap, fp);
-    while((linelen = getline(&line, &linecap, fp)) != -1) {
+    while ((linelen = getline(&line, &linecap, fp)) != -1) {
         while (linelen > 0 && (line[linelen - 1] == '\n' ||
                                line[linelen - 1] == '\r'))
             linelen--;
@@ -195,7 +196,6 @@ void editorOpen(char *filename) {
     free(line);
     fclose(fp);
 }
-
 
 
 /** append buffer */
@@ -226,7 +226,8 @@ void editorDrawRows(struct abuf *ab) {
         if (y >= E.numrows) { // Draw rows after buffer
             if (E.numrows == 0 && y == E.screenrows / 3) {
                 char welcome[80];
-                int welcomelen = snprintf(welcome, sizeof welcome, "Tyrel Editor -- version %s", TYREL_VERSION);
+                int welcomelen = snprintf(welcome, sizeof welcome, "Tyrel Text Editor Deluxe -- version %s",
+                                          TTED_VERSION);
                 int padding = (E.screencols - welcomelen) / 2;
                 if (padding) {
                     abAppend(ab, "~", 1);
@@ -330,6 +331,7 @@ void editorProcessKeypress() {
 void initEditor() {
     E.cx = 0;
     E.cy = 0;
+    E.rowoff = 0;
     E.numrows = 0;
     E.row = NULL;
     if (getWindowSize(&E.screenrows, &E.screencols) == -1) die("getWindowSize");
