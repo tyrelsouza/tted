@@ -3,4 +3,4 @@ project(editor)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(editor kilo.cpp)
+add_executable(editor kilo.c)
