@@ -64,6 +64,7 @@ struct editorConfig E;
 /** prototypes */
 void editorSetStatusMessage(const char *fmt, ...);
 void editorRefreshScreen();
+char *editorPrompt(char *prompt);
 
 /** terminal */
 void die(const char *s) {
@@ -344,7 +345,13 @@ char *editorRowsToString(int *buflen) {
 }
 
 void editorSave() {
-    if (E.filename == NULL) return;
+    if (E.filename == NULL) {
+      E.filename = editorPrompt("Save as: %s (ESC to cancel)");
+      if (E.filename == NULL) {
+        editorSetStatusMessage("Save aborted");
+        return;
+      }
+    }
 
     int len;
     char *buf = editorRowsToString(&len);
@@ -536,7 +543,13 @@ char *editorPrompt(char *prompt){
         editorSetStatusMessage(prompt, buf);
         editorRefreshScreen();
         int c = editorReadKey();
-        if (c == '\r') {
+        if (c ==  DEL_KEY || c == CTRL_KEY('h') || c == BACKSPACE) {
+          if (buflen != 0) buf[--buflen] = '\0';
+        } else if (c == '\x1b'){
+          editorSetStatusMessage("");
+          free(buf);
+          return NULL;
+        } else if (c == '\r') {
             if (buflen != 0){
                 editorSetStatusMessage("");
                 return buf;
