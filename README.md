@@ -1,9 +1,4 @@
 Tyrel's Text Editor
 
-
-https://viewsourcecode.org/snaptoken/kilo/04.aTextViewer.html#vertical-scrolling
-https://viewsourcecode.org/snaptoken/kilo/04.aTextViewer.html#horizontal-scrolling
-https://viewsourcecode.org/snaptoken/kilo/04.aTextViewer.html#tabs-and-the-cursor
-https://viewsourcecode.org/snaptoken/kilo/04.aTextViewer.html#scrolling-with-page-up-and-page-down
-
-https://viewsourcecode.org/snaptoken/kilo/05.aTextEditor.html
+next:
+https://viewsourcecode.org/snaptoken/kilo/07.syntaxHighlighting.html
