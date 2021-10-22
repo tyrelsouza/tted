@@ -549,7 +549,6 @@ char *editorPrompt(char *prompt){
             buf[buflen++] = c;
             buf[buflen] = '\0';
         }
-        break;
     }
 }
 
